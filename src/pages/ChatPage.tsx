@@ -87,7 +87,7 @@ export default function SohbetSayfasi() {
         {suankiSohbet && suankiSohbet.mesajlar.length > 0 ? (
           <MesajListesi mesajlar={suankiSohbet.mesajlar} yukleniyor={yukleniyor} />
         ) : (
-          <BosDurum oneriFn={oneriIsle} />
+          <BosDurum oneriFn={oneriIsle} rol={kullanici?.rol} />
         )}
 
         <SohbetGirdisi gonderFn={mesajIsle} devreDisi={yukleniyor} streamingMi={streamingMi} />
