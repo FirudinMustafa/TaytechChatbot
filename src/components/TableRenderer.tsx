@@ -1,6 +1,7 @@
 import { TabloVerisi } from '../types';
 import { temaKullan } from '../context/ThemeContext';
 import { birlesik } from '../utils/cn';
+import { excelIndir, pdfIndir } from '../utils/disaAktar';
 
 interface TabloGostericiProps {
   veri: TabloVerisi;
@@ -34,14 +35,35 @@ export default function TabloGosterici({ veri }: TabloGostericiProps) {
         )}>
           Sorgu Sonuçları
         </span>
-        <span className={birlesik(
-          'text-sm px-3 py-1 rounded-lg',
-          temaKoyuMu 
-            ? 'text-neutral-400 bg-neutral-700' 
-            : 'text-neutral-600 bg-neutral-200'
-        )}>
-          {veri.satirlar.length} kayıt
-        </span>
+        <div className="flex items-center gap-2">
+          {/* Dışa aktarım */}
+          <button
+            onClick={() => excelIndir(veri)}
+            title="Excel olarak indir"
+            className={birlesik(
+              'text-xs px-2.5 py-1 rounded-lg font-medium transition-colors',
+              temaKoyuMu ? 'text-neutral-300 bg-neutral-700 hover:bg-neutral-600' : 'text-neutral-600 bg-neutral-200 hover:bg-neutral-300',
+            )}
+          >
+            Excel
+          </button>
+          <button
+            onClick={() => pdfIndir(veri)}
+            title="PDF olarak indir"
+            className={birlesik(
+              'text-xs px-2.5 py-1 rounded-lg font-medium transition-colors',
+              temaKoyuMu ? 'text-neutral-300 bg-neutral-700 hover:bg-neutral-600' : 'text-neutral-600 bg-neutral-200 hover:bg-neutral-300',
+            )}
+          >
+            PDF
+          </button>
+          <span className={birlesik(
+            'text-sm px-3 py-1 rounded-lg',
+            temaKoyuMu ? 'text-neutral-400 bg-neutral-700' : 'text-neutral-600 bg-neutral-200'
+          )}>
+            {veri.satirlar.length} kayıt
+          </span>
+        </div>
       </div>
 
       {/* Table */}

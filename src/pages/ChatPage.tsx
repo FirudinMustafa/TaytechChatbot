@@ -8,11 +8,13 @@ import MesajListesi from '../components/MessageList';
 import SohbetGirdisi from '../components/ChatInput';
 import BosDurum from '../components/EmptyState';
 import TemaSecimModal from '../components/ThemeSelectionModal';
+import AraclarPaneli from '../components/AraclarPaneli';
 import { birlesik } from '../utils/cn';
 
 export default function SohbetSayfasi() {
   const { kullanici, cikisYap } = girisKullan();
   const { temaKoyuMu } = temaKullan();
+  const [araclarAcik, araclarAcikAyarla] = useState(false);
 
   const {
     sohbetler,
@@ -42,6 +44,16 @@ export default function SohbetSayfasi() {
     <>
       {/* Tema Seçim Modalı */}
       <TemaSecimModal />
+
+      {/* Veri Araçları Paneli (role göre) */}
+      {kullanici && (
+        <AraclarPaneli
+          acik={araclarAcik}
+          kapatFn={() => araclarAcikAyarla(false)}
+          rol={kullanici.rol}
+          kullaniciId={kullanici.id}
+        />
+      )}
       
       <div className={birlesik(
         'h-screen flex',
@@ -66,9 +78,10 @@ export default function SohbetSayfasi() {
         'flex-1 flex flex-col min-w-0',
         temaKoyuMu ? 'bg-neutral-900' : 'bg-white'
       )}>
-        <SohbetBasligi 
+        <SohbetBasligi
           yeniSohbetFn={yeniSohbetOlustur}
           sidebarAcikMi={sidebarAcik}
+          araclarAcFn={() => araclarAcikAyarla(true)}
         />
 
         {suankiSohbet && suankiSohbet.mesajlar.length > 0 ? (

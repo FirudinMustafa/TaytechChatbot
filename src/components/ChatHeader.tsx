@@ -1,12 +1,14 @@
 import { birlesik } from '../utils/cn';
 import { temaKullan } from '../context/ThemeContext';
+import BildirimZili from './BildirimZili';
 
 interface SohbetBasligiProps {
   yeniSohbetFn: () => void;
   sidebarAcikMi: boolean;
+  araclarAcFn?: () => void;
 }
 
-export default function SohbetBasligi({ yeniSohbetFn, sidebarAcikMi }: SohbetBasligiProps) {
+export default function SohbetBasligi({ yeniSohbetFn, sidebarAcikMi, araclarAcFn }: SohbetBasligiProps) {
   const { temaKoyuMu, temaDegistir } = temaKullan();
 
   return (
@@ -27,6 +29,28 @@ export default function SohbetBasligi({ yeniSohbetFn, sidebarAcikMi }: SohbetBas
       </div>
 
       <div className="flex items-center gap-2">
+        {/* Araçlar (veri girişi / panel) */}
+        {araclarAcFn && (
+          <button
+            onClick={araclarAcFn}
+            className={birlesik(
+              'flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
+              temaKoyuMu
+                ? 'text-neutral-400 hover:bg-neutral-800 hover:text-white'
+                : 'text-neutral-500 hover:bg-neutral-100 hover:text-neutral-800',
+            )}
+            title="Veri Araçları"
+          >
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+              <path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z" />
+            </svg>
+            Araçlar
+          </button>
+        )}
+
+        {/* Bildirim Çanı */}
+        <BildirimZili />
+
         {/* Tema Değiştirme Butonu */}
         <button
           onClick={temaDegistir}

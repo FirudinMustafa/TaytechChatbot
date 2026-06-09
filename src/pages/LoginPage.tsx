@@ -1,7 +1,7 @@
 import { useState, FormEvent, useRef, useEffect, KeyboardEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { girisKullan } from '../context/AuthContext';
-import { kullaniciKontrolApi, girisYapApi } from '../services/api';
+import { kullaniciKontrolApi } from '../services/api';
 import Bildirim from '../components/Toast';
 
 export default function GirisSayfasi() {
@@ -115,41 +115,18 @@ export default function GirisSayfasi() {
 
   const girisKontrol = async (sifre: string) => {
     yukleniyorAyarla(true);
-    try {
-      // Önce sadece API ile kontrol et (kullanıcı kaydı yapmadan)
-      const sonuc = await girisYapApi(kullaniciAdi.trim(), sifre);
-      yukleniyorAyarla(false);
-      
-      if (sonuc.basarili) {
-        // Yeşil efekt göster
-        basariliAyarla(true);
-        
-        // 2 saniye bekle, sonra kullanıcıyı kaydet (bu yönlendirmeyi tetikleyecek)
-        setTimeout(async () => {
-          await girisYap(kullaniciAdi.trim(), sifre);
-        }, 2000);
-      } else {
-        // Kırmızı efekt göster
-        hataliAyarla(true);
-        
-        // 1 saniye sonra temizle ve ilk kutuya geç
-        setTimeout(() => {
-          pinAyarla(['', '', '', '', '', '']);
-          hataliAyarla(false);
-          // İmleci ilk kutuya taşı
-          setTimeout(() => {
-            pinRefs.current[0]?.focus();
-          }, 50);
-        }, 1000);
-      }
-    } catch {
-      yukleniyorAyarla(false);
+    // Gerçek giriş (Supabase). Başarılıysa AuthContext oturum dinleyicisi
+    // kullaniciyi ayarlar ve yönlendirme otomatik gerçekleşir.
+    const sonuc = await girisYap(kullaniciAdi.trim(), sifre);
+    yukleniyorAyarla(false);
+
+    if (sonuc.basarili) {
+      basariliAyarla(true);
+    } else {
       hataliAyarla(true);
-      
       setTimeout(() => {
         pinAyarla(['', '', '', '', '', '']);
         hataliAyarla(false);
-        // İmleci ilk kutuya taşı
         setTimeout(() => {
           pinRefs.current[0]?.focus();
         }, 50);
