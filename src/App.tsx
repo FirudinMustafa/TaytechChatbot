@@ -3,6 +3,21 @@ import { GirisProvider, girisKullan } from './context/AuthContext';
 import { TemaProvider } from './context/ThemeContext';
 import GirisSayfasi from './pages/LoginPage';
 import SohbetSayfasi from './pages/ChatPage';
+import { ortamHazirMi } from './services/supabase';
+
+function OrtamUyarisi() {
+  if (ortamHazirMi) return null;
+  return (
+    <div style={{
+      position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9999,
+      background: '#b91c1c', color: '#fff', padding: '8px 16px',
+      fontSize: 13, textAlign: 'center', fontFamily: 'system-ui, sans-serif',
+    }}>
+      ⚠️ Sunucu bağlantısı yapılandırılmamış — Vercel ortam değişkenleri
+      (VITE_SUPABASE_URL ve VITE_SUPABASE_ANON_KEY) eksik. Giriş çalışmayacaktır.
+    </div>
+  );
+}
 
 function YukleniyorEkrani() {
   return (
@@ -56,6 +71,7 @@ function UygulamaRotalari() {
 export default function Uygulama() {
   return (
     <BrowserRouter>
+      <OrtamUyarisi />
       <GirisProvider>
         <TemaProvider>
           <UygulamaRotalari />
